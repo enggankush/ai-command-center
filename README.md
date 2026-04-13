@@ -1,8 +1,8 @@
-# ai-command-center
-
-### Built using React, Node.js, MongoDB, and AI integrations to create a scalable multi-tool platform.
+# AI Command Center
 
 A centralized AI command center featuring multiple AI-powered apps and utilities for productivity, learning, and developer workflows.
+
+Built with React, Node.js, MongoDB, and AI integrations to create a scalable multi-tool platform.
 
 ## Project Structure
 
