@@ -23,7 +23,7 @@ ai-command-center/
 - 💬 **AI Document Chat**
 - 🧠 **Smart AI Agent Assistant**
 - 💻 **AI Code Generator**
-- ✅ **Todo App**
+- ✅ **AI Todo App**
 - 🎮 **Tic Tac Toe Game**
 
 ## Overview
