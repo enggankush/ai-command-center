@@ -11,6 +11,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 import Stats from "./pages/Stats";
 import Layout from "./Layout";
+import TodoPage from "./pages/ai-todo/TodoPage";
 
 // ✅ Layout wrapper using Outlet
 const LayoutWrapper = () => (
@@ -43,6 +44,7 @@ function App() {
           {/* ✅ Main Layout (Header only once) */}
           <Route element={<LayoutWrapper />}>
             <Route path="/stats" element={<Stats />} />
+            <Route path="/to-do" element={<TodoPage />} />
           </Route>
         </Routes>
       </Router>

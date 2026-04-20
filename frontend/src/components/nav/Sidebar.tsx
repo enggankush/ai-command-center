@@ -20,7 +20,7 @@ import {
 } from "@mui/icons-material";
 
 const menuItems = [
-  { text: "AI Analyticsr", icon: <AutoGraph /> },
+  { text: "AI Analytics", icon: <AutoGraph /> },
   { text: "AI Resume Analyzer", icon: <Description /> },
   { text: "AI Interview Preparation", icon: <TrackChanges /> },
   { text: "AI Document Chat", icon: <Chat /> },

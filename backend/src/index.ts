@@ -2,7 +2,9 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes";
+import aiTodoRoutes from "./routes/aiTodoRoutes";
 import { connectDB } from "./config/db";
+import errorHandler from "./middlewares/err-handler";
 
 dotenv.config();
 
@@ -18,6 +20,7 @@ connectDB();
 
 // Routes
 app.use("/auth", authRoutes);
+app.use("/todo", aiTodoRoutes);
 
 // Health check
 app.get("/health", (req, res) => {
@@ -25,17 +28,7 @@ app.get("/health", (req, res) => {
 });
 
 // Error handler
-app.use(
-  (
-    err: any,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction,
-  ) => {
-    console.error(err);
-    res.status(400).json({ message: "Something went wrong" });
-  },
-);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(
