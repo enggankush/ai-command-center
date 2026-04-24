@@ -3,7 +3,7 @@ import mongoose, { Document, Schema } from "mongoose";
 export interface ITodo extends Document {
   text: string;
   completed: boolean;
-  user: mongoose.Types.ObjectId;
+  userId: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -19,7 +19,7 @@ const aiTodoSchema = new Schema<ITodo>(
       type: Boolean,
       default: false,
     },
-    user: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: false,

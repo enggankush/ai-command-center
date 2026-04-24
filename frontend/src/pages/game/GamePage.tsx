@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
-import useGame from "./hooks/useGame";
+import useGame from "../../hooks/useGame";
 import PageTitle from "../../components/custom/PageTitle";
-import Board from "./components/Board";
-import Status from "./components/Status";
-import Controls from "./components/Controls";
-import ScoreBoard from "./components/ScoreBoard";
+import Board from "./comp/Board";
+import Status from "./comp/Status";
+import Controls from "./comp/Controls";
+import ScoreBoard from "./comp/ScoreBoard";
 
 const GamePage = () => {
   const game = useGame();

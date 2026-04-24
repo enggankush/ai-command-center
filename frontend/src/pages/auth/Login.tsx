@@ -10,7 +10,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import authService from "../../services/authService";
 import CustomBox from "../../components/custom/CustomBox";
-import AuthCard from "../../components/custom/AuthCard";
+import AuthCard from "./comp/AuthCard";
 import CustomTextField from "../../components/custom/CustomTextField";
 import CustomButton from "../../components/custom/CustomButton";
 
@@ -31,7 +31,7 @@ function Login() {
       console.log("Login successful:", response.data);
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("currentUser", JSON.stringify(response.data.user));
-      navigate("/stats");
+      navigate("/ai-stats");
     } catch (err: any) {
       setError(err.response?.data?.message || "Login failed");
     } finally {

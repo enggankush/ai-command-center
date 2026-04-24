@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { checkWinner, isDraw, getRandomMove, bestMove } from "../utils/ai";
+import { checkWinner, isDraw, getRandomMove, bestMove } from "../utils/game-ai";
 
 type Player = "X" | "O" | "";
 type Result = "X" | "O" | "draw" | null;
@@ -42,6 +42,8 @@ const useGame = () => {
   };
 
   useEffect(() => {
+    if (result) return;
+
     // ✅ WIN CHECK FIRST
     const win = checkWinner(boxs);
 

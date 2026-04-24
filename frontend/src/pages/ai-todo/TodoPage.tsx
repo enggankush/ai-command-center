@@ -2,8 +2,8 @@ import { Box, Paper, Typography, List } from "@mui/material";
 import { useState, useEffect } from "react";
 import PageTitle from "../../components/custom/PageTitle";
 
-import TodoInput from "./TodoInput";
-import TodoItem from "./TodoItem";
+import TodoInput from "./comp/TodoInput";
+import TodoItem from "./comp/TodoItem";
 
 const TodoPage: React.FC = () => {
   type Todo = {
