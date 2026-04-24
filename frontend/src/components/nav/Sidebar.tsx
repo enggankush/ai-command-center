@@ -18,19 +18,33 @@ import {
   SportsEsports,
   Logout,
 } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const menuItems = [
-  { text: "AI Analytics", icon: <AutoGraph /> },
-  { text: "AI Resume Analyzer", icon: <Description /> },
-  { text: "AI Interview Preparation", icon: <TrackChanges /> },
-  { text: "AI Document Chat", icon: <Chat /> },
-  { text: "Smart AI Agent Assistant", icon: <Psychology /> },
-  { text: "AI Code Generator", icon: <Code /> },
-  { text: "AI Todo App", icon: <CheckCircle /> },
-  { text: "Tic Tac Toe Game", icon: <SportsEsports /> },
+  { text: "AI Stats", icon: <AutoGraph />, path: "/ai-stats" },
+  {
+    text: "AI Resume Analyzer",
+    icon: <Description />,
+    path: "/ai-resume-analyzer",
+  },
+  {
+    text: "AI Interview Preparation",
+    icon: <TrackChanges />,
+    path: "/ai-interview-prep",
+  },
+  { text: "AI Document Chat", icon: <Chat />, path: "/ai-document-chat" },
+  { text: "Smart AI Agent Assistant", icon: <Psychology />, path: "/ai-agent" },
+  { text: "AI Code Generator", icon: <Code />, path: "/ai-code-generator" },
+  { text: "AI Todo App", icon: <CheckCircle />, path: "/ai-todo-app" },
+  {
+    text: "Tic Tac Toe Game",
+    icon: <SportsEsports />,
+    path: "/tic-tac-toe-game",
+  },
 ];
 
 const Sidebar = () => {
+  const navigator = useNavigate();
   return (
     <>
       <Box sx={{}}>
@@ -38,7 +52,7 @@ const Sidebar = () => {
         <List>
           {menuItems.map((item) => (
             <ListItem key={item.text} disablePadding>
-              <ListItemButton>
+              <ListItemButton onClick={() => navigator(item.path)}>
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.text} />
               </ListItemButton>
