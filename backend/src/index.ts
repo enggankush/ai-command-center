@@ -1,12 +1,11 @@
+import { config } from "dotenv";
+config();
+
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
-import authRoutes from "./routes/authRoutes";
-import aiTodoRoutes from "./routes/aiTodoRoutes";
 import { connectDB } from "./config/db";
 import errorHandler from "./middlewares/err-handler";
-
-dotenv.config();
+import router from "./routes";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -19,8 +18,7 @@ app.use(cors());
 connectDB();
 
 // Routes
-app.use("/auth", authRoutes);
-app.use("/todo", aiTodoRoutes);
+app.use("/api", router);
 
 // Health check
 app.get("/health", (req, res) => {

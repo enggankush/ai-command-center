@@ -2,7 +2,7 @@ import bcryptjs from "bcryptjs";
 import jwt, { SignOptions } from "jsonwebtoken";
 import { User } from "../models/User";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_key";
+const JWT_SECRET = process.env.JWT_SECRET as string;
 
 const JWT_EXPIRE: SignOptions["expiresIn"] =
   (process.env.JWT_EXPIRE as SignOptions["expiresIn"]) || "7d";

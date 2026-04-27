@@ -12,6 +12,7 @@ import { CssBaseline } from "@mui/material";
 import Stats from "./pages/Stats";
 import Layout from "./Layout";
 import TodoPage from "./pages/ai-todo/TodoPage";
+import GamePage from "./pages/game/GamePage";
 
 // ✅ Layout wrapper using Outlet
 const LayoutWrapper = () => (
@@ -43,8 +44,9 @@ function App() {
 
           {/* ✅ Main Layout (Header only once) */}
           <Route element={<LayoutWrapper />}>
-            <Route path="/stats" element={<Stats />} />
-            <Route path="/to-do" element={<TodoPage />} />
+            <Route path="/ai-stats" element={<Stats />} />
+            <Route path="/ai-todo-app" element={<TodoPage />} />
+            <Route path="/tic-tac-toe-game" element={<GamePage />} />
           </Route>
         </Routes>
       </Router>

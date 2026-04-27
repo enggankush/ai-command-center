@@ -4,7 +4,7 @@ import AnalyticsPolarChart from "../components/stats/AnalyticsPolarChart";
 const Stats = () => {
   return (
     <>
-      <PageTitle title="AI Analytics"></PageTitle>
+      <PageTitle title="AI Stats"></PageTitle>
 
       <AnalyticsPolarChart />
     </>

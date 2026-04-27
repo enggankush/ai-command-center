@@ -1,7 +1,12 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import * as authService from "../services/authService";
+import resHandler from "../middlewares/res-hadler";
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { fullName, email, password } = req.body;
 
@@ -10,16 +15,25 @@ export const register = async (req: Request, res: Response) => {
     }
 
     const user = await authService.register(fullName, email, password);
-    res.status(201).json({
-      message: "User registered successfully",
-      user: { id: user._id, fullName: user.fullName, email: user.email },
+    resHandler.success(res, {
+      code: 201,
+      msg: "User registered successfully",
+      data: {
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+      },
     });
-  } catch (error: any) {
-    res.status(400).json({ message: error.message });
+  } catch (error) {
+    next(error);
   }
 };
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { email, password } = req.body;
 
@@ -30,17 +44,28 @@ export const login = async (req: Request, res: Response) => {
     }
 
     const { user, token } = await authService.login(email, password);
-    res.status(200).json({
-      message: "Login successful",
-      token,
-      user: { id: user._id, email: user.email, fullName: user.fullName },
+
+    resHandler.success(res, {
+      msg: "Login successful",
+      data: {
+        token,
+        user: {
+          id: user._id,
+          email: user.email,
+          fullName: user.fullName,
+        },
+      },
     });
-  } catch (error: any) {
-    res.status(401).json({ message: error.message });
+  } catch (error) {
+    next(error);
   }
 };
 
-export const forgotPassword = async (req: Request, res: Response) => {
+export const forgotPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { email } = req.body;
 
@@ -48,18 +73,27 @@ export const forgotPassword = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Email is required" });
     }
 
-    const { resetToken, user } = await authService.forgotPassword(email);
-    res.status(200).json({
-      message: "Password reset link sent to your email",
-      resetToken,
-      user: { id: user._id, email: user.email },
+    const { user } = await authService.forgotPassword(email);
+
+    resHandler.success(res, {
+      msg: "Password reset link sent",
+      data: {
+        user: {
+          id: user._id,
+          email: user.email,
+        },
+      },
     });
   } catch (error: any) {
-    res.status(400).json({ message: error.message });
+    next(error);
   }
 };
 
-export const resetPassword = async (req: Request, res: Response) => {
+export const resetPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { token, newPassword } = req.body;
 
@@ -70,8 +104,11 @@ export const resetPassword = async (req: Request, res: Response) => {
     }
 
     await authService.resetPassword(token, newPassword);
-    res.status(200).json({ message: "Password reset successfully" });
+    resHandler.success(res, {
+      msg: "Password reset successfully",
+      data: null,
+    });
   } catch (error: any) {
-    res.status(400).json({ message: error.message });
+    next(error);
   }
 };
