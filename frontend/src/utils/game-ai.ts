@@ -9,12 +9,22 @@ export const winPatterns = [
   [2, 4, 6],
 ];
 
-export const checkWinner = (board: string[]) => {
-  for (let [a, b, c] of winPatterns) {
+type Player = "X" | "O";
+
+export const checkWinner = (
+  board: string[],
+): { winner: Player; pattern: number[] } | null => {
+  for (let pattern of winPatterns) {
+    const [a, b, c] = pattern;
+
     if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-      return board[a];
+      return {
+        winner: board[a] as Player,
+        pattern: [a, b, c],
+      };
     }
   }
+
   return null;
 };
 
@@ -29,10 +39,10 @@ export const getRandomMove = (board: string[]) => {
 };
 
 export const minimax = (board: string[], isMax: boolean): number => {
-  const winner = checkWinner(board);
+  const result = checkWinner(board);
 
-  if (winner === "O") return 1;
-  if (winner === "X") return -1;
+  if (result?.winner === "O") return 1;
+  if (result?.winner === "X") return -1;
   if (isDraw(board)) return 0;
 
   if (isMax) {

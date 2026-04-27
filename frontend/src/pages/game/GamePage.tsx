@@ -17,7 +17,11 @@ const GamePage = () => {
 
         <Status result={game.result} turn={game.turn} />
 
-        <Board boxs={game.boxs} onClick={game.handleClick} />
+        <Board
+          boxs={game.boxs}
+          onClick={game.handleClick}
+          winningCells={game.winningCells}
+        />
 
         <Controls reset={game.reset} mode={game.mode} setMode={game.setMode} />
       </Box>

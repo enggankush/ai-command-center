@@ -3,10 +3,9 @@ import resHandler from "./res-hadler";
 
 const errorHandler = (
   err: any,
-  req: Request,
+  _req: Request,
   res: Response,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  next: NextFunction, // donot remove next
+  next: NextFunction,
 ) => {
   console.error(err);
 

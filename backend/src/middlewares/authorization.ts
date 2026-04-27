@@ -2,46 +2,42 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import resHandler from "./res-hadler";
 
-const APP_NAME = process.env.APP_NAME;
-const SECRET_KEY = process.env.JWT_SECRET as string;
+const JWT_SECRET = process.env.JWT_SECRET as string;
 
 const authorization = (req: Request, res: Response, next: NextFunction) => {
-  if (process.env.NODE_ENV !== "production") {
-    next();
-    return;
-  }
+  // console.log("In auth midd");
 
-  const headers = req.headers;
-  const authorization = headers["authorization"];
+  try {
+    const authHeader = req.headers.authorization;
 
-  if (!authorization || !authorization.startsWith("Bearer ")) {
-    return resHandler.error(res, {
-      msg: "Token is not supplied",
-      code: 401,
-    });
-  }
-
-  const token = authorization.slice(7, authorization.length);
-
-  jwt.verify(token, SECRET_KEY, (err: any, decoded: any) => {
-    if (err) {
-      console.error(err);
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return resHandler.error(res, {
-        msg: err.message,
         code: 401,
+        msg: "Invalid or missing token",
       });
     }
 
-    if (decoded.clientName !== APP_NAME) {
-      console.info(decoded);
-      return resHandler.error(res, {
-        msg: "Invalid token supplied",
-        code: 401,
-      });
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+      return resHandler.error(res, { code: 401, msg: "No token provided" });
     }
 
+    const decoded = jwt.verify(token, JWT_SECRET) as {
+      userId: string;
+      email: string;
+      iat: number;
+      exp: number;
+    };
+    res.locals.userId = decoded.userId;
+
     next();
-  });
+  } catch (err: any) {
+    console.error(err);
+    if (err.name === "TokenExpiredError") {
+      return resHandler.error(res, { code: 401, msg: "Token expired" });
+    }
+    return resHandler.error(res, { code: 401, msg: "Invalid token" });
+  }
 };
 
 export default authorization;
