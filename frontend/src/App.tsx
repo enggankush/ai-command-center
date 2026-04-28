@@ -11,6 +11,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 import Stats from "./pages/Stats";
 import Layout from "./Layout";
+import ResumeAnalyzerPage from "./pages/resume-analyzer/ResumeAnalyzerPage";
 import TodoPage from "./pages/ai-todo/TodoPage";
 import GamePage from "./pages/game/GamePage";
 
@@ -45,6 +46,10 @@ function App() {
           {/* ✅ Main Layout (Header only once) */}
           <Route element={<LayoutWrapper />}>
             <Route path="/ai-stats" element={<Stats />} />
+            <Route
+              path="/ai-resume-analyzer"
+              element={<ResumeAnalyzerPage />}
+            />
             <Route path="/ai-todo-app" element={<TodoPage />} />
             <Route path="/tic-tac-toe-game" element={<GamePage />} />
           </Route>

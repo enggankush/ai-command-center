@@ -29,8 +29,11 @@ function Login() {
     try {
       const response = await authService.login(email, password);
       console.log("Login successful:", response.data);
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("currentUser", JSON.stringify(response.data.user));
+      localStorage.setItem("token", response.data.data.token);
+      localStorage.setItem(
+        "currentUser",
+        JSON.stringify(response.data.data.user),
+      );
       navigate("/ai-stats");
     } catch (err: any) {
       setError(err.response?.data?.message || "Login failed");
