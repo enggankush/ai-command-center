@@ -50,7 +50,7 @@ function Register() {
   return (
     <Container maxWidth="sm">
       <CustomBox>
-        <AuthCard title="Register">
+        <AuthCard title="Get Started with AI Command Center">
           {error && (
             <Alert severity="error" sx={{ marginBottom: "1rem" }}>
               {error}

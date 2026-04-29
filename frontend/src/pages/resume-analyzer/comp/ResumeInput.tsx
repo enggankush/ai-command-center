@@ -91,7 +91,7 @@ const ResumeInput: React.FC<Props> = ({ onAnalysisComplete }) => {
 
   return (
     <>
-      <Typography variant="h4">
+      <Typography variant="h4" sx={{ ml: 3 }}>
         Improve your resume with AI-powered insights
       </Typography>
       <Card sx={{ maxWidth: 800, mx: "auto", mt: 4 }}>

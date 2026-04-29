@@ -29,11 +29,8 @@ function Login() {
     try {
       const response = await authService.login(email, password);
       console.log("Login successful:", response.data);
-      localStorage.setItem("token", response.data.data.token);
-      localStorage.setItem(
-        "currentUser",
-        JSON.stringify(response.data.data.user),
-      );
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("currentUser", JSON.stringify(response.data.user));
       navigate("/ai-stats");
     } catch (err: any) {
       setError(err.response?.data?.message || "Login failed");
@@ -45,7 +42,7 @@ function Login() {
   return (
     <Container maxWidth="sm">
       <CustomBox>
-        <AuthCard title="Login">
+        <AuthCard title="Welcome Back to AI Command Center">
           {error && (
             <Alert severity="error" sx={{ marginBottom: "1rem" }}>
               {error}

@@ -9,7 +9,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <Grid container spacing={2} sx={{ mt: 10 }}>
         <Grid
           size={3}
-          sx={{ borderRight: "1px solid #ccc;", minHeight: "88vh" }}
+          sx={{ borderRight: "1px solid #ccc", minHeight: "88vh" }}
         >
           <Sidebar />
         </Grid>
