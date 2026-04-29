@@ -11,14 +11,18 @@ export const register = async (
     const { fullName, email, password } = req.body;
 
     if (!fullName || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
+      return resHandler.error(res, {
+        msg: "All fields are required",
+        code: 400,
+      });
     }
 
     const user = await authService.register(fullName, email, password);
-    resHandler.success(res, {
+
+    return resHandler.success(res, {
       code: 201,
       msg: "User registered successfully",
-      data: {
+      user: {
         id: user._id,
         fullName: user.fullName,
         email: user.email,
@@ -38,22 +42,21 @@ export const login = async (
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res
-        .status(400)
-        .json({ message: "Email and password are required" });
+      return resHandler.error(res, {
+        msg: "Email and password are required",
+        code: 400,
+      });
     }
 
     const { user, token } = await authService.login(email, password);
 
-    resHandler.success(res, {
+    return resHandler.success(res, {
       msg: "Login successful",
-      data: {
-        token,
-        user: {
-          id: user._id,
-          email: user.email,
-          fullName: user.fullName,
-        },
+      token,
+      user: {
+        id: user._id,
+        email: user.email,
+        fullName: user.fullName,
       },
     });
   } catch (error) {
@@ -70,21 +73,22 @@ export const forgotPassword = async (
     const { email } = req.body;
 
     if (!email) {
-      return res.status(400).json({ message: "Email is required" });
+      return resHandler.error(res, {
+        msg: "Email is required",
+        code: 400,
+      });
     }
 
     const { user } = await authService.forgotPassword(email);
 
-    resHandler.success(res, {
+    return resHandler.success(res, {
       msg: "Password reset link sent",
-      data: {
-        user: {
-          id: user._id,
-          email: user.email,
-        },
+      user: {
+        id: user._id,
+        email: user.email,
       },
     });
-  } catch (error: any) {
+  } catch (error) {
     next(error);
   }
 };
@@ -98,17 +102,18 @@ export const resetPassword = async (
     const { token, newPassword } = req.body;
 
     if (!token || !newPassword) {
-      return res
-        .status(400)
-        .json({ message: "Token and new password are required" });
+      return resHandler.error(res, {
+        msg: "Token and new password are required",
+        code: 400,
+      });
     }
 
     await authService.resetPassword(token, newPassword);
-    resHandler.success(res, {
+
+    return resHandler.success(res, {
       msg: "Password reset successfully",
-      data: null,
     });
-  } catch (error: any) {
+  } catch (error) {
     next(error);
   }
 };

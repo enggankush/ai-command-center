@@ -1,22 +1,24 @@
 import { Response } from "express";
 
 const resHandler = {
-  success: (res: Response, pl: { data: any; msg?: string; code?: number }) => {
-    res.status(pl.code || 200).json({
-      status: "success",
-      statusCode: pl.code || 200,
-      message: pl.msg || "Success",
-      data: pl.data,
+  success: (
+    res: Response,
+    pl: { msg?: string; code?: number; [key: string]: any },
+  ) => {
+    const { code = 200, msg = "Success", ...rest } = pl;
+
+    res.status(code).json({
+      success: true,
+      message: msg,
+      ...rest, // 👈 token, user, etc. come here directly
     });
   },
 
   error: (res: Response, pl: { msg: string; code: number }, errors?: any) => {
     res.status(pl.code).json({
-      status: "error",
-      statusCode: pl.code,
+      success: false,
       message: pl.msg,
       errors,
-      data: null,
     });
   },
 };

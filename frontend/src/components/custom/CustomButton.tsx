@@ -1,4 +1,12 @@
-import { Button, CircularProgress } from "@mui/material";
+import { Button } from "@mui/material";
+
+interface CustomButtonProps {
+  text: string;
+  type: "button" | "submit";
+  onClick?: () => void;
+  disabled?: boolean;
+  children?: React.ReactNode;
+}
 
 const CustomButton: React.FC<CustomButtonProps> = ({
   text,
@@ -23,11 +31,3 @@ const CustomButton: React.FC<CustomButtonProps> = ({
 };
 
 export default CustomButton;
-
-interface CustomButtonProps {
-  text: string;
-  type: "button" | "submit";
-  onClick?: () => void;
-  disabled?: boolean;
-  children?: React.ReactNode;
-}

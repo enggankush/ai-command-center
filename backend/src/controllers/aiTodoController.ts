@@ -53,7 +53,7 @@ export const updateTodos = async (
 ) => {
   try {
     const id = req.params.id as string;
-    const { text } = req.body;
+    const { text, completed } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return resHandler.error(res, {
@@ -62,18 +62,25 @@ export const updateTodos = async (
       });
     }
 
-    if (!text) {
+    // ✅ Allow updating either text or completed
+    const updateData: any = {};
+    if (text !== undefined) {
+      updateData.text = text;
+    }
+    if (completed !== undefined) {
+      updateData.completed = completed;
+    }
+
+    if (Object.keys(updateData).length === 0) {
       return resHandler.error(res, {
-        msg: "Todo text is required",
+        msg: "No fields to update",
         code: 400,
       });
     }
 
-    const updatedData = await Todo.findByIdAndUpdate(
-      id,
-      { text },
-      { returnDocument: "after" },
-    );
+    const updatedData = await Todo.findByIdAndUpdate(id, updateData, {
+      returnDocument: "after",
+    });
 
     if (!updatedData) {
       return resHandler.error(res, {
