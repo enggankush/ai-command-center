@@ -8,28 +8,37 @@ import {
   Box,
   Alert,
   CircularProgress,
-  Paper,
 } from "@mui/material";
-import { Document, Page } from "react-pdf";
+import { useNavigate } from "react-router-dom";
+import { uploadResume, ResumeResponse } from "../../../services/resumeService";
 
 interface Props {
-  onAnalysisComplete: (data: any) => void;
+  onAnalysisComplete?: (data: ResumeResponse) => void;
 }
 
 const ResumeInput: React.FC<Props> = ({ onAnalysisComplete }) => {
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState("");
-  const [jobDescription, setJobDescription] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [jobDescription, setJobDescription] = useState(`
+Required Qualifications:
+* Currently pursuing or recently completed a degree in Computer Science, IT, or a related field
+* Strong understanding of HTML, CSS, JavaScript, and backend fundamentals
+* Familiarity with frontend frameworks (React, Angular, or Vue)
+* Basic knowledge of backend technologies (Node.js, Python, etc.)
+* Understanding of databases and API concepts
+* Familiarity with Git or version control systems
+* Problem-solving skills and ability to work independently
+Preferred Skills:
+* Experience with full-stack projects or coursework
+* Familiarity with REST APIs and deployment processes
+* Basic understanding of cloud platforms or hosting environments
+* Exposure to real-world application architecture`);
   const [error, setError] = useState("");
-  const [numPages, setNumPages] = useState<number>(0);
-  const [pageNumber, setPageNumber] = useState(1);
+  const [loading, setLoading] = useState(false);
 
-  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
-    setNumPages(numPages);
-  };
+  const navigate = useNavigate();
 
-  // ✅ File Upload Validation
+  // ✅ File Validation
   const handleFileUpload = (file: File) => {
     const allowedTypes = [
       "application/pdf",
@@ -52,7 +61,7 @@ const ResumeInput: React.FC<Props> = ({ onAnalysisComplete }) => {
     setError("");
   };
 
-  // ✅ Submit Handler
+  // ✅ SUBMIT HANDLER
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -70,20 +79,19 @@ const ResumeInput: React.FC<Props> = ({ onAnalysisComplete }) => {
       setLoading(true);
       setError("");
 
-      const formData = new FormData();
-      formData.append("resume", resumeFile);
-      formData.append("jobDescription", jobDescription);
+      const data = await uploadResume(resumeFile, jobDescription);
 
-      // 🔥 Replace with your backend API
-      const res = await fetch("/api/analyze", {
-        method: "POST",
-        body: formData,
-      });
+      // optional callback
+      if (onAnalysisComplete) {
+        onAnalysisComplete(data);
+      }
 
-      const data = await res.json();
-      onAnalysisComplete(data);
-    } catch (err) {
-      setError("Something went wrong. Try again.");
+      // store result (for dashboard page)
+      localStorage.setItem("resumeAnalysis", JSON.stringify(data));
+
+      navigate("/ai-resume-analyzer/result");
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -94,6 +102,7 @@ const ResumeInput: React.FC<Props> = ({ onAnalysisComplete }) => {
       <Typography variant="h4" sx={{ ml: 3 }}>
         Improve your resume with AI-powered insights
       </Typography>
+
       <Card sx={{ maxWidth: 800, mx: "auto", mt: 4 }}>
         <CardContent>
           <Box component="form" onSubmit={handleSubmit} sx={uploadStyle}>
@@ -105,6 +114,7 @@ const ResumeInput: React.FC<Props> = ({ onAnalysisComplete }) => {
             <Button
               variant="outlined"
               component="label"
+              disabled={loading}
               sx={{ textTransform: "none", fontSize: 16 }}
             >
               Choose File
@@ -121,54 +131,9 @@ const ResumeInput: React.FC<Props> = ({ onAnalysisComplete }) => {
 
             {/* File Name */}
             {fileName && (
-              <Typography variant="body2">Uploaded: {fileName}</Typography>
-            )}
-
-            {/* PDF Preview only */}
-            {resumeFile && resumeFile.type === "application/pdf" && (
-              <Paper sx={{ p: 2, overflow: "auto" }}>
-                <Document
-                  file={resumeFile}
-                  onLoadSuccess={onDocumentLoadSuccess}
-                >
-                  <Page pageNumber={pageNumber} />
-                </Document>
-
-                {numPages > 1 && (
-                  <Box
-                    sx={{
-                      mt: 2,
-                      display: "flex",
-                      justifyContent: "center",
-                      gap: 1,
-                    }}
-                  >
-                    <Button
-                      size="small"
-                      onClick={() =>
-                        setPageNumber((prev) => Math.max(prev - 1, 1))
-                      }
-                      disabled={pageNumber === 1}
-                    >
-                      Prev
-                    </Button>
-
-                    <Typography>
-                      {pageNumber} / {numPages}
-                    </Typography>
-
-                    <Button
-                      size="small"
-                      onClick={() =>
-                        setPageNumber((prev) => Math.min(prev + 1, numPages))
-                      }
-                      disabled={pageNumber === numPages}
-                    >
-                      Next
-                    </Button>
-                  </Box>
-                )}
-              </Paper>
+              <Typography variant="body2">
+                Uploaded: <b>{fileName}</b>
+              </Typography>
             )}
 
             {/* Job Description */}
@@ -179,6 +144,7 @@ const ResumeInput: React.FC<Props> = ({ onAnalysisComplete }) => {
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
               fullWidth
+              disabled={loading}
             />
 
             {/* Error */}
@@ -192,7 +158,14 @@ const ResumeInput: React.FC<Props> = ({ onAnalysisComplete }) => {
               disabled={loading}
               sx={{ textTransform: "none", fontSize: 16 }}
             >
-              {loading ? <CircularProgress size={20} /> : "Analyze Resume"}
+              {loading ? (
+                <>
+                  <CircularProgress size={20} sx={{ mr: 1 }} />
+                  Analyzing...
+                </>
+              ) : (
+                "Analyze Resume"
+              )}
             </Button>
           </Box>
         </CardContent>

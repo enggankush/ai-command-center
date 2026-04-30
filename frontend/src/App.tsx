@@ -14,6 +14,7 @@ import Layout from "./Layout";
 import ResumeAnalyzerPage from "./pages/resume-analyzer/ResumeAnalyzerPage";
 import TodoPage from "./pages/ai-todo/TodoPage";
 import GamePage from "./pages/game/GamePage";
+import ResultPage from "./pages/resume-analyzer/ResultPage";
 
 // ✅ Layout wrapper using Outlet
 const LayoutWrapper = () => (
@@ -50,6 +51,7 @@ function App() {
               path="/ai-resume-analyzer"
               element={<ResumeAnalyzerPage />}
             />
+            <Route path="/ai-resume-analyzer/result" element={<ResultPage />} />
             <Route path="/ai-todo-app" element={<TodoPage />} />
             <Route path="/tic-tac-toe-game" element={<GamePage />} />
           </Route>

@@ -8,12 +8,9 @@ const ResumeAnalyzerPage = () => {
 
   // ✅ Handle response properly
   const handleAnalysisComplete = (data: any) => {
-    // assuming backend returns { analysisId: "123" }
-    const analysisId = data?.analysisId;
-
-    if (analysisId) {
-      navigate(`/analysis/${analysisId}`);
-    }
+    // Backend returns analysis result, navigate to result page
+    localStorage.setItem("resumeAnalysis", JSON.stringify(data));
+    navigate("/ai-resume-analyzer/result");
   };
 
   return (
