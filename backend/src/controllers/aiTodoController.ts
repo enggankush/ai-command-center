@@ -3,7 +3,6 @@ import Todo from "../models/aiTodo";
 import resHandler from "../middlewares/res-hadler";
 import mongoose from "mongoose";
 
-// GET all todos
 export const getTodos = async (
   req: Request,
   res: Response,
@@ -18,7 +17,6 @@ export const getTodos = async (
   }
 };
 
-// CREATE todo
 export const createTodos = async (
   req: Request,
   res: Response,
@@ -45,7 +43,6 @@ export const createTodos = async (
   }
 };
 
-// UPDATE todo
 export const updateTodos = async (
   req: Request,
   res: Response,
@@ -62,7 +59,6 @@ export const updateTodos = async (
       });
     }
 
-    // ✅ Allow updating either text or completed
     const updateData: any = {};
     if (text !== undefined) {
       updateData.text = text;
@@ -97,7 +93,6 @@ export const updateTodos = async (
   }
 };
 
-// DELETE todo
 export const deleteTodos = async (
   req: Request,
   res: Response,

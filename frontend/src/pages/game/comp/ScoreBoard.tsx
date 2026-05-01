@@ -9,19 +9,16 @@ const ScoreBoard = ({ score }: any) => {
         gap: 6,
       }}
     >
-      {/* X Player */}
       <Paper sx={boxStyle("#4fd1c5")}>
         <Typography variant="body2">X (YOU)</Typography>
         <Typography variant="h5">{score.X}</Typography>
       </Paper>
 
-      {/* Draw */}
       <Paper sx={boxStyle("#cbd5e1")}>
         <Typography variant="body2">Draw</Typography>
         <Typography variant="h5">{score.draw}</Typography>
       </Paper>
 
-      {/* O Player */}
       <Paper sx={boxStyle("#f6ad55")}>
         <Typography variant="body2">O (AI)</Typography>
         <Typography variant="h5">{score.O}</Typography>

@@ -1,12 +1,10 @@
 import axios from "axios";
 
-// ✅ Axios instance
-const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+const API = axios.create({
+  baseURL: "http://localhost:5000/api/resume",
 });
 
-// ✅ Attach token automatically
-api.interceptors.request.use((config) => {
+API.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
 
   if (token) {
@@ -16,7 +14,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// ✅ TYPES (important for TS + interview)
 export interface ResumeResponse {
   score: number;
   keywords: {
@@ -32,7 +29,7 @@ export interface ResumeResponse {
   feedback: string[];
 }
 
-// ✅ MAIN API FUNCTION
+// MAIN API FUNCTION
 export const uploadResume = async (
   file: File,
   jobDescription: string,
@@ -41,7 +38,7 @@ export const uploadResume = async (
   formData.append("resume", file);
   formData.append("jobDescription", jobDescription);
 
-  const res = await api.post("/resume/analyze", formData, {
+  const res = await API.post("/analyze", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -49,5 +46,3 @@ export const uploadResume = async (
 
   return res.data.data;
 };
-
-export default api;

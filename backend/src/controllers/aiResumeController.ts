@@ -25,28 +25,21 @@ export const analyzeResume = async (
       });
     }
 
-    // 1️⃣ Extract text
     const resumeText = await extractTextFromFile(file);
 
-    // 2️⃣ Keyword matching
     const keywords = matchKeywords(resumeText, jobDescription);
 
-    // 3️⃣ Section detection
     const sections = detectSections(resumeText);
 
-    // 4️⃣ ATS score
     const score = analyzeATS({ keywords, sections });
 
-    // 5️⃣ Suggestions
     const suggestions = generateSuggestions({ keywords, sections });
 
-    // 6️⃣ AI feedback (temporary)
     const feedback = [
       "Improve action verbs in experience section",
       "Add more quantified achievements",
     ];
 
-    // ✅ 7️⃣ Save to DB
     const saved = await ResumeModel.create({
       fileName: file.originalname,
       resumeText,
@@ -58,7 +51,6 @@ export const analyzeResume = async (
       feedback,
     });
 
-    // ✅ Return saved data
     return resHandler.success(res, {
       data: saved,
       msg: "Resume analyzed successfully",

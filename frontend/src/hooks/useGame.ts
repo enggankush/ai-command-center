@@ -34,7 +34,6 @@ const useGame = () => {
     drawSound.current = new Audio("/sounds/draw.mp3");
   }, []);
 
-  /* ================= SAVE SCORE ================= */
   useEffect(() => {
     localStorage.setItem("score", JSON.stringify(score));
   }, [score]);
@@ -46,7 +45,6 @@ const useGame = () => {
     ref.current.play().catch(() => {});
   };
 
-  /* ================= HANDLE CLICK ================= */
   const handleClick = (index: number) => {
     if (boxs[index] || result || turn !== "X") return;
 
@@ -64,7 +62,7 @@ const useGame = () => {
 
     const win = checkWinner(boxs);
 
-    // ✅ WIN CHECK FIRST
+    // WIN CHECK FIRST
     if (win) {
       const { winner, pattern } = win;
 
@@ -85,7 +83,7 @@ const useGame = () => {
       return;
     }
 
-    // ✅ DRAW CHECK SECOND
+    // DRAW CHECK SECOND
     if (isDraw(boxs)) {
       setResult("draw");
 
@@ -98,7 +96,7 @@ const useGame = () => {
       return;
     }
 
-    // ✅ AI TURN
+    // AI TURN
     if (turn === "O") {
       const timer = setTimeout(() => {
         let move: number;
@@ -153,12 +151,10 @@ const useGame = () => {
     saveGame();
   }, [result, mode]);
 
-  /* ================= RESET ON MODE ================= */
   useEffect(() => {
     reset();
   }, [mode]);
 
-  /* ================= RESET ================= */
   const reset = () => {
     setBoxs(Array(9).fill(""));
     setTurn("X");

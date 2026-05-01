@@ -38,10 +38,10 @@ interface Section {
 const ScoreSidebar = ({ data }: { data: ResumeData }) => {
   const [expanded, setExpanded] = useState<number | false>(0);
 
-  // ✅ Safe fallback
+  // Safe fallback
   const score = data?.score ?? 0;
 
-  // ✅ Calculate issues dynamically
+  // Calculate issues dynamically
   const missingKeywords = data?.keywords?.missing?.length || 0;
   const missingSections = Object.values(data?.sections || {}).filter(
     (v) => !v,
@@ -50,7 +50,7 @@ const ScoreSidebar = ({ data }: { data: ResumeData }) => {
 
   const issues = missingKeywords + missingSections + suggestionIssues;
 
-  // 🎯 Dynamic Section Builder
+  // Dynamic Section Builder
   const groupedSections: Section[] = [
     {
       title: "ATS SCORE",
@@ -59,22 +59,6 @@ const ScoreSidebar = ({ data }: { data: ResumeData }) => {
         {
           name: "Overall Score",
           status: score > 80 ? "Good" : score > 60 ? "Improve" : "Poor",
-        },
-      ],
-    },
-
-    {
-      title: "KEYWORDS",
-      score: `${Math.max(100 - missingKeywords * 10, 0)}%`,
-      items: [
-        {
-          name: "Matched Keywords",
-          status:
-            (data?.keywords?.matched?.length || 0) > 5 ? "Good" : "Improve",
-        },
-        {
-          name: "Missing Keywords",
-          status: missingKeywords > 0 ? "Missing" : "Good",
         },
       ],
     },
@@ -99,6 +83,22 @@ const ScoreSidebar = ({ data }: { data: ResumeData }) => {
     },
 
     {
+      title: "KEYWORDS",
+      score: `${Math.max(100 - missingKeywords * 10, 0)}%`,
+      items: [
+        {
+          name: "Matched Keywords",
+          status:
+            (data?.keywords?.matched?.length || 0) > 5 ? "Good" : "Improve",
+        },
+        {
+          name: "Missing Keywords",
+          status: missingKeywords > 0 ? "Missing" : "Good",
+        },
+      ],
+    },
+
+    {
       title: "SUGGESTIONS",
       score: `${Math.max(100 - suggestionIssues * 10, 0)}%`,
       items: [
@@ -115,7 +115,7 @@ const ScoreSidebar = ({ data }: { data: ResumeData }) => {
     },
   ];
 
-  // 🎨 status color
+  // status color
   const getColor = (status: string) => {
     if (status === "Good") return "success";
     if (status === "Improve") return "warning";
@@ -123,7 +123,6 @@ const ScoreSidebar = ({ data }: { data: ResumeData }) => {
     return "default";
   };
 
-  // 🔥 Accordion control
   const handleChange =
     (panel: number) => (_: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
@@ -133,9 +132,9 @@ const ScoreSidebar = ({ data }: { data: ResumeData }) => {
     <Box
       sx={{
         background: "#fff",
-        borderRadius: 3,
+        borderRadius: 1,
         p: 2,
-        boxShadow: 2,
+        boxShadow: 1,
         position: "sticky",
         top: 20,
         maxHeight: "90vh",
@@ -166,7 +165,6 @@ const ScoreSidebar = ({ data }: { data: ResumeData }) => {
 
       <Divider sx={{ my: 2 }} />
 
-      {/* ACCORDIONS */}
       {groupedSections.map((section, index) => (
         <Accordion
           key={index}

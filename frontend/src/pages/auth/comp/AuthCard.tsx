@@ -1,6 +1,11 @@
 import { Typography } from "@mui/material";
 import type { ReactNode } from "react";
 
+interface AuthCardProps {
+  title?: string;
+  children?: ReactNode;
+}
+
 const AuthCard: React.FC<AuthCardProps> = ({ title, children }) => {
   return (
     <>
@@ -17,8 +22,3 @@ const AuthCard: React.FC<AuthCardProps> = ({ title, children }) => {
 };
 
 export default AuthCard;
-
-interface AuthCardProps {
-  title?: string;
-  children?: ReactNode;
-}

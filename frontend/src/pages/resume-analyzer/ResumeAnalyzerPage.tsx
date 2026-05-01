@@ -6,9 +6,7 @@ import { useNavigate } from "react-router-dom";
 const ResumeAnalyzerPage = () => {
   const navigate = useNavigate();
 
-  // ✅ Handle response properly
   const handleAnalysisComplete = (data: any) => {
-    // Backend returns analysis result, navigate to result page
     localStorage.setItem("resumeAnalysis", JSON.stringify(data));
     navigate("/ai-resume-analyzer/result");
   };

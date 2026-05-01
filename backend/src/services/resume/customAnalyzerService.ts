@@ -12,17 +12,6 @@ interface Sections {
   experience: boolean;
 }
 
-interface KeywordData {
-  matched: string[];
-  missing: string[];
-}
-
-interface Sections {
-  skills: boolean;
-  education: boolean;
-  experience: boolean;
-}
-
 const STOPWORDS = new Set<string>([
   "the",
   "and",
