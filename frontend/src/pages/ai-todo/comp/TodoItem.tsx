@@ -7,17 +7,13 @@ import {
   ListItemText,
 } from "@mui/material";
 import { EditOutlined, DeleteOutlineOutlined } from "@mui/icons-material";
+import { ITodo } from "../../../services/todoService";
 
-type Todo = {
-  id: number;
-  text: string;
-  completed: boolean;
-};
 type Props = {
-  todo: Todo;
-  onCheck: (id: number) => void;
-  onEdit: (todo: Todo) => void;
-  onDelete: (id: number) => void;
+  todo: ITodo;
+  onCheck: (id: string) => void;
+  onEdit: (todo: ITodo) => void;
+  onDelete: (id: string) => void;
 };
 const TodoItem: React.FC<Props> = ({ todo, onCheck, onEdit, onDelete }) => {
   return (
@@ -37,7 +33,7 @@ const TodoItem: React.FC<Props> = ({ todo, onCheck, onEdit, onDelete }) => {
 
           <IconButton
             edge="end"
-            onClick={() => onDelete(todo.id)}
+            onClick={() => onDelete(todo._id)}
             sx={{ ml: 1 }}
           >
             <DeleteOutlineOutlined sx={{ color: "#ff5252" }} />
@@ -45,7 +41,7 @@ const TodoItem: React.FC<Props> = ({ todo, onCheck, onEdit, onDelete }) => {
         </>
       }
     >
-      <ListItemButton onClick={() => onCheck(todo.id)} dense>
+      <ListItemButton onClick={() => onCheck(todo._id)} dense>
         <ListItemIcon>
           <Checkbox
             edge="start"

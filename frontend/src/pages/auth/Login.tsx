@@ -42,7 +42,7 @@ function Login() {
   return (
     <Container maxWidth="sm">
       <CustomBox>
-        <AuthCard title="Login">
+        <AuthCard title="Welcome Back to AI Command Center">
           {error && (
             <Alert severity="error" sx={{ marginBottom: "1rem" }}>
               {error}

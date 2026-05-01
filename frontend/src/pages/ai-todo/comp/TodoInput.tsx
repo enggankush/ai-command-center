@@ -4,8 +4,8 @@ import { useState } from "react";
 type Props = {
   inputValue: string;
   setInputValue: (value: string) => void;
-  onSubmit: (e: React.SubmitEvent<HTMLFormElement>) => void;
-  editId: number | null;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  editId: string | null;
 };
 
 const MIN_LENGTH = 5;
@@ -19,7 +19,7 @@ const TodoInput: React.FC<Props> = ({
 }) => {
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (inputValue.length > MAX_LENGTH) {

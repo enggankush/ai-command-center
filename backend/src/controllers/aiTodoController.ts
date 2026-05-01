@@ -3,7 +3,6 @@ import Todo from "../models/aiTodo";
 import resHandler from "../middlewares/res-hadler";
 import mongoose from "mongoose";
 
-// GET all todos
 export const getTodos = async (
   req: Request,
   res: Response,
@@ -18,7 +17,6 @@ export const getTodos = async (
   }
 };
 
-// CREATE todo
 export const createTodos = async (
   req: Request,
   res: Response,
@@ -45,7 +43,6 @@ export const createTodos = async (
   }
 };
 
-// UPDATE todo
 export const updateTodos = async (
   req: Request,
   res: Response,
@@ -53,7 +50,7 @@ export const updateTodos = async (
 ) => {
   try {
     const id = req.params.id as string;
-    const { text } = req.body;
+    const { text, completed } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return resHandler.error(res, {
@@ -62,18 +59,24 @@ export const updateTodos = async (
       });
     }
 
-    if (!text) {
+    const updateData: any = {};
+    if (text !== undefined) {
+      updateData.text = text;
+    }
+    if (completed !== undefined) {
+      updateData.completed = completed;
+    }
+
+    if (Object.keys(updateData).length === 0) {
       return resHandler.error(res, {
-        msg: "Todo text is required",
+        msg: "No fields to update",
         code: 400,
       });
     }
 
-    const updatedData = await Todo.findByIdAndUpdate(
-      id,
-      { text },
-      { returnDocument: "after" },
-    );
+    const updatedData = await Todo.findByIdAndUpdate(id, updateData, {
+      returnDocument: "after",
+    });
 
     if (!updatedData) {
       return resHandler.error(res, {
@@ -90,7 +93,6 @@ export const updateTodos = async (
   }
 };
 
-// DELETE todo
 export const deleteTodos = async (
   req: Request,
   res: Response,
