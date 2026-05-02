@@ -7,21 +7,21 @@ import {
   AccordionSummary,
   Accordion,
 } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState } from "react";
+import { recompareResume } from "../../../services/resumeService";
 
 interface ResumeData {
-  score: number;
-  keywords?: {
-    matched: string[];
-    missing: string[];
+  id?: string;
+  static?: {
+    score?: number;
+    keywords?: { matched?: string[]; missing?: string[] };
+    sections?: { skills?: boolean; education?: boolean; experience?: boolean };
+    suggestions?: string[];
+    feedback?: string[];
   };
-  sections?: {
-    skills: boolean;
-    education: boolean;
-    experience: boolean;
-  };
-  suggestions?: string[];
+  aiResult?: any;
 }
 
 interface Item {
@@ -37,16 +37,21 @@ interface Section {
 
 const ScoreSidebar = ({ data }: { data: ResumeData }) => {
   const [expanded, setExpanded] = useState<number | false>(0);
+  const [loading, setLoading] = useState(false);
 
   // Safe fallback
-  const score = data?.score ?? 0;
+  const score = data?.static?.score ?? 0;
 
   // Calculate issues dynamically
-  const missingKeywords = data?.keywords?.missing?.length || 0;
-  const missingSections = Object.values(data?.sections || {}).filter(
-    (v) => !v,
-  ).length;
-  const suggestionIssues = data?.suggestions?.length || 0;
+  const missingKeywords = data?.static?.keywords?.missing?.length || 0;
+  const missingSections = Object.values(
+    data?.static?.sections || {
+      skills: false,
+      education: false,
+      experience: false,
+    },
+  ).filter((v) => !v).length;
+  const suggestionIssues = data?.static?.suggestions?.length || 0;
 
   const issues = missingKeywords + missingSections + suggestionIssues;
 
@@ -69,15 +74,15 @@ const ScoreSidebar = ({ data }: { data: ResumeData }) => {
       items: [
         {
           name: "Skills",
-          status: data?.sections?.skills ? "Good" : "Missing",
+          status: data?.static?.sections?.skills ? "Good" : "Missing",
         },
         {
           name: "Education",
-          status: data?.sections?.education ? "Good" : "Missing",
+          status: data?.static?.sections?.education ? "Good" : "Missing",
         },
         {
           name: "Experience",
-          status: data?.sections?.experience ? "Good" : "Missing",
+          status: data?.static?.sections?.experience ? "Good" : "Missing",
         },
       ],
     },
@@ -89,7 +94,9 @@ const ScoreSidebar = ({ data }: { data: ResumeData }) => {
         {
           name: "Matched Keywords",
           status:
-            (data?.keywords?.matched?.length || 0) > 5 ? "Good" : "Improve",
+            (data?.static?.keywords?.matched?.length || 0) > 5
+              ? "Good"
+              : "Improve",
         },
         {
           name: "Missing Keywords",
@@ -161,6 +168,33 @@ const ScoreSidebar = ({ data }: { data: ResumeData }) => {
         <Typography color="text.secondary">
           {issues} Issue{issues !== 1 ? "s" : ""}
         </Typography>
+        <Box sx={{ mt: 2 }}>
+          <Button
+            variant="contained"
+            size="small"
+            onClick={async () => {
+              const id = data?.id;
+              if (!id) return;
+              setLoading(true);
+              try {
+                const res = await recompareResume(id);
+                // store the returned structured data
+                localStorage.setItem("resumeAnalysis", JSON.stringify(res));
+                window.location.reload();
+              } catch (err) {
+                console.error(err);
+                setLoading(false);
+              }
+            }}
+            disabled={!data?.id || loading}
+          >
+            {loading ? (
+              <CircularProgress size={16} color="inherit" />
+            ) : (
+              "Re-compare"
+            )}
+          </Button>
+        </Box>
       </Box>
 
       <Divider sx={{ my: 2 }} />

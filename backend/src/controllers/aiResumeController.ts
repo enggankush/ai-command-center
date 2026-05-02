@@ -1,13 +1,7 @@
 import { Response, NextFunction } from "express";
-import ResumeModel from "../models/aiResume";
 import resHandler from "../middlewares/res-hadler";
-import {
-  analyzeATS,
-  detectSections,
-  extractTextFromFile,
-  generateSuggestions,
-  matchKeywords,
-} from "../services/resume/customAnalyzerService";
+import analyzeAndSaveResume from "../services/resume/atsService";
+import { recompareById } from "../services/resume/atsService";
 
 export const analyzeResume = async (
   req: any,
@@ -25,38 +19,59 @@ export const analyzeResume = async (
       });
     }
 
-    const resumeText = await extractTextFromFile(file);
+    // delegate analysis and persistence to ats service
+    const force = !!(
+      req.body &&
+      (req.body.forceRecompute === true || req.body.forceRecompute === "true")
+    );
+    const result = await analyzeAndSaveResume(file, jobDescription, { force });
 
-    const keywords = matchKeywords(resumeText, jobDescription);
+    const msg = result.cached
+      ? `Resume previously compared on ${result.cachedAt?.toISOString() || "unknown"}`
+      : "Resume analyzed successfully";
 
-    const sections = detectSections(resumeText);
-
-    const score = analyzeATS({ keywords, sections });
-
-    const suggestions = generateSuggestions({ keywords, sections });
-
-    const feedback = [
-      "Improve action verbs in experience section",
-      "Add more quantified achievements",
-    ];
-
-    const saved = await ResumeModel.create({
-      fileName: file.originalname,
-      resumeText,
-      jobDescription,
-      score,
-      keywords,
-      sections,
-      suggestions,
-      feedback,
-    });
+    // result is the saved structured object returned by the service
+    const saved = result || {};
+    const data = {
+      ...saved,
+      aiResult: result.aiResult,
+    };
 
     return resHandler.success(res, {
-      data: saved,
-      msg: "Resume analyzed successfully",
+      data,
+      meta: { cached: !!result.cached, cachedAt: result.cachedAt },
+      msg,
     });
   } catch (error: any) {
     console.error(error);
     next(error);
+  }
+};
+
+export const recompareResume = async (
+  req: any,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const id = req.params.id;
+    if (!id)
+      return resHandler.error(res, { msg: "Missing resume id", code: 400 });
+
+    const result = await recompareById(id, { force: true });
+
+    const saved = result || {};
+    const data = {
+      ...saved,
+      aiResult: result.aiResult,
+    };
+
+    return resHandler.success(res, {
+      data,
+      msg: "Re-compare completed",
+    });
+  } catch (err: any) {
+    console.error(err);
+    next(err);
   }
 };

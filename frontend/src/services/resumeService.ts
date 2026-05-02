@@ -14,20 +14,7 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-export interface ResumeResponse {
-  score: number;
-  keywords: {
-    matched: string[];
-    missing: string[];
-  };
-  sections: {
-    skills: boolean;
-    education: boolean;
-    experience: boolean;
-  };
-  suggestions: string[];
-  feedback: string[];
-}
+export type ResumeResponse = any;
 
 // MAIN API FUNCTION
 export const uploadResume = async (
@@ -44,5 +31,10 @@ export const uploadResume = async (
     },
   });
 
+  return res.data.data;
+};
+
+export const recompareResume = async (id: string) => {
+  const res = await API.post(`/recompare/${id}`);
   return res.data.data;
 };

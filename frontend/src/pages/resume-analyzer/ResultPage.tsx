@@ -27,13 +27,19 @@ const ResultPage = () => {
 
           {/* RIGHT CONTENT */}
           <Grid size={8.6} sx={{ overflow: "auto", maxHeight: "88vh" }}>
-            <ContentAnalysis sections={data.sections} />
+            <ContentAnalysis
+              sections={data?.static?.sections ?? data?.sections}
+            />
 
-            <KeywordAnalysis keywords={data.keywords} />
+            <KeywordAnalysis
+              keywords={data?.static?.keywords ?? data?.keywords}
+            />
 
-            <SuggestionsPanel suggestions={data.suggestions} />
+            <SuggestionsPanel
+              suggestions={data?.static?.suggestions ?? data?.suggestions}
+            />
 
-            <AiFeedback feedback={data.feedback} />
+            <AiFeedback feedback={data?.static?.feedback ?? data?.feedback} />
           </Grid>
         </Grid>
       </Box>
