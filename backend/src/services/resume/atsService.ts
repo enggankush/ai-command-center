@@ -126,7 +126,7 @@ export const analyzeAndSaveResume = async (
   if (existing) {
     // update existing record
     savedDoc = await ResumeModel.findByIdAndUpdate(existing._id, toSave, {
-      new: true,
+      returnDocument: "after",
     });
   } else {
     savedDoc = await ResumeModel.create(toSave);
@@ -212,7 +212,7 @@ export const recompareById = async (
   }
 
   const savedDoc = await ResumeModel.findByIdAndUpdate(existing._id, toSave, {
-    new: true,
+    returnDocument: "after",
   });
 
   return {
