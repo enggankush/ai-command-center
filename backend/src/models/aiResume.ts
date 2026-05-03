@@ -1,9 +1,4 @@
-import mongoose, {
-  HydratedDocument,
-  InferSchemaType,
-  model,
-  Schema,
-} from "mongoose";
+import mongoose, { HydratedDocument, InferSchemaType, Schema } from "mongoose";
 
 const ResumeSchema = new Schema(
   {
@@ -54,7 +49,6 @@ const ResumeSchema = new Schema(
       raw: { type: Schema.Types.Mixed },
     },
     compareHash: { type: String, index: true },
-    lastComparedAt: { type: Date },
   },
   {
     timestamps: true,
