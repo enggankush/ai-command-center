@@ -22,6 +22,9 @@ interface ResumeData {
     feedback?: string[];
   };
   aiResult?: any;
+  cached?: boolean;
+  cachedAt?: Date | null;
+  updatedAt?: Date;
 }
 
 interface Item {
@@ -38,6 +41,7 @@ interface Section {
 const ScoreSidebar = ({ data }: { data: ResumeData }) => {
   const [expanded, setExpanded] = useState<number | false>(0);
   const [loading, setLoading] = useState(false);
+  const [hideMessage, setHideMessage] = useState(false);
 
   // Safe fallback
   const score = data?.static?.score ?? 0;
@@ -168,33 +172,6 @@ const ScoreSidebar = ({ data }: { data: ResumeData }) => {
         <Typography color="text.secondary">
           {issues} Issue{issues !== 1 ? "s" : ""}
         </Typography>
-        <Box sx={{ mt: 2 }}>
-          <Button
-            variant="contained"
-            size="small"
-            onClick={async () => {
-              const id = data?.id;
-              if (!id) return;
-              setLoading(true);
-              try {
-                const res = await recompareResume(id);
-                // store the returned structured data
-                localStorage.setItem("resumeAnalysis", JSON.stringify(res));
-                window.location.reload();
-              } catch (err) {
-                console.error(err);
-                setLoading(false);
-              }
-            }}
-            disabled={!data?.id || loading}
-          >
-            {loading ? (
-              <CircularProgress size={16} color="inherit" />
-            ) : (
-              "Re-compare"
-            )}
-          </Button>
-        </Box>
       </Box>
 
       <Divider sx={{ my: 2 }} />
@@ -245,6 +222,53 @@ const ScoreSidebar = ({ data }: { data: ResumeData }) => {
           </AccordionDetails>
         </Accordion>
       ))}
+
+      <Divider sx={{ my: 2 }} />
+
+      <Box sx={{ mt: 2, textAlign: "center" }}>
+        <Button
+          variant="contained"
+          size="small"
+          color="success"
+          disabled={data?.aiResult}
+          onClick={async () => {
+            const id = data?.id;
+            if (!id) return;
+
+            setHideMessage(true);
+            setLoading(true);
+
+            try {
+              const res = await recompareResume(id);
+              localStorage.setItem("resumeAnalysis", JSON.stringify(res));
+              window.location.reload();
+            } catch (err) {
+              console.error(err);
+              setLoading(false);
+              setHideMessage(false);
+            }
+          }}
+        >
+          {loading ? <CircularProgress size={16} /> : "Re-compare"}
+        </Button>
+        <br />
+        {!hideMessage && (
+          <Typography variant="caption" color="text.secondary">
+            Result Source:{" "}
+            {data?.aiResult
+              ? `AI (${data?.cached ? "Cached" : "Live"})`
+              : `Static (${data?.cached ? "Cached" : "Live"})`}
+            <br />
+            {data?.cachedAt && (
+              <div>Cached at: {new Date(data.cachedAt).toLocaleString()}</div>
+            )}
+            Compared at:{" "}
+            {data?.updatedAt
+              ? new Date(data.updatedAt).toLocaleString()
+              : "N/A"}
+          </Typography>
+        )}
+      </Box>
     </Box>
   );
 };

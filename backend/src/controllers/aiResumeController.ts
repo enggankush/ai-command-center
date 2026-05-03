@@ -1,7 +1,9 @@
 import { Response, NextFunction } from "express";
 import resHandler from "../middlewares/res-hadler";
-import analyzeAndSaveResume from "../services/resume/atsService";
-import { recompareById } from "../services/resume/atsService";
+import {
+  analyzeAndSaveResume,
+  recompareById,
+} from "../services/resume/atsService";
 
 export const analyzeResume = async (
   req: any,
@@ -39,7 +41,6 @@ export const analyzeResume = async (
 
     return resHandler.success(res, {
       data,
-      meta: { cached: !!result.cached, cachedAt: result.cachedAt },
       msg,
     });
   } catch (error: any) {
@@ -58,7 +59,7 @@ export const recompareResume = async (
     if (!id)
       return resHandler.error(res, { msg: "Missing resume id", code: 400 });
 
-    const result = await recompareById(id, { force: true });
+    const result = await recompareById(id);
 
     const saved = result || {};
     const data = {

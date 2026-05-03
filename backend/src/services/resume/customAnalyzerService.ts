@@ -1,16 +1,6 @@
 import { PDFParse } from "pdf-parse";
 import mammoth from "mammoth";
-
-interface KeywordData {
-  matched: string[];
-  missing: string[];
-}
-
-interface Sections {
-  skills: boolean;
-  education: boolean;
-  experience: boolean;
-}
+import { KeywordData, Sections } from "../../types/aiResumeType";
 
 const STOPWORDS = new Set<string>([
   "the",
@@ -159,7 +149,7 @@ export const analyzeATS = ({
   return Math.max(score, 0);
 };
 
-export const matchKeywords = (resume: string, jd: string) => {
+export const matchKeywords = (resume: string, jd: string): KeywordData => {
   const cleanWords = (text: string) =>
     text
       .toLowerCase()
@@ -178,7 +168,7 @@ export const matchKeywords = (resume: string, jd: string) => {
   return { matched, missing };
 };
 
-export const detectSections = (text: string) => {
+export const detectSections = (text: string): Sections => {
   const lower = text.toLowerCase();
 
   return {
