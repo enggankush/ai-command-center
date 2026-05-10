@@ -58,7 +58,12 @@ const Sidebar = () => {
               </ListItemButton>
             </ListItem>
           ))}
-          <ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              navigator("/login");
+              localStorage.removeItem("currentUser");
+            }}
+          >
             <ListItemIcon sx={{ color: "red" }}>
               <Logout />
             </ListItemIcon>

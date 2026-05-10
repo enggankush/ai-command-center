@@ -15,6 +15,7 @@ import ResumeAnalyzerPage from "./pages/resume-analyzer/ResumeAnalyzerPage";
 import TodoPage from "./pages/ai-todo/TodoPage";
 import GamePage from "./pages/game/GamePage";
 import ResultPage from "./pages/resume-analyzer/ResultPage";
+import AuthGuard from "./AuthGuard";
 
 // ✅ Layout wrapper using Outlet
 const LayoutWrapper = () => (
@@ -45,7 +46,13 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
 
           {/* ✅ Main Layout (Header only once) */}
-          <Route element={<LayoutWrapper />}>
+          <Route
+            element={
+              <AuthGuard>
+                <LayoutWrapper />
+              </AuthGuard>
+            }
+          >
             <Route path="/ai-stats" element={<Stats />} />
             <Route
               path="/ai-resume-analyzer"
