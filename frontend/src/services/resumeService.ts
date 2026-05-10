@@ -1,18 +1,4 @@
-import axios from "axios";
-
-const API = axios.create({
-  baseURL: "http://localhost:5000/api/resume",
-});
-
-API.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-
-  return config;
-});
+import API from "./api";
 
 export type ResumeResponse = any;
 
@@ -25,7 +11,7 @@ export const uploadResume = async (
   formData.append("resume", file);
   formData.append("jobDescription", jobDescription);
 
-  const res = await API.post("/analyze", formData, {
+  const res = await API.post("/resume/analyze", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -35,6 +21,6 @@ export const uploadResume = async (
 };
 
 export const recompareResume = async (id: string) => {
-  const res = await API.post(`/recompare/${id}`);
+  const res = await API.post(`/resume/recompare/${id}`);
   return res.data.data;
 };

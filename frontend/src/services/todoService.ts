@@ -1,16 +1,4 @@
-import axios from "axios";
-
-const API = axios.create({
-  baseURL: "http://localhost:5000/api/todo",
-});
-
-API.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+import API from "./api";
 
 export interface ITodo {
   _id: string;
@@ -20,12 +8,12 @@ export interface ITodo {
 }
 
 export const getTodos = async (): Promise<ITodo[]> => {
-  const res = await API.get("/");
+  const res = await API.get("/todo/");
   return res.data.data;
 };
 
 export const createTodo = async (text: string): Promise<ITodo> => {
-  const res = await API.post("/", { text });
+  const res = await API.post("/todo/", { text });
   return res.data.data;
 };
 
@@ -33,10 +21,10 @@ export const updateTodo = async (
   id: string,
   data: { text?: string; completed?: boolean },
 ): Promise<ITodo> => {
-  const res = await API.put(`/${id}`, data);
+  const res = await API.put(`/todo/${id}`, data);
   return res.data.data;
 };
 
 export const deleteTodo = async (id: string): Promise<void> => {
-  await API.delete(`/${id}`);
+  await API.delete(`/todo/${id}`);
 };
