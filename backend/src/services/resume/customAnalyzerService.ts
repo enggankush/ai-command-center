@@ -111,7 +111,7 @@ export const extractTextFromFile = async (file: Express.Multer.File) => {
   if (file.mimetype === "application/pdf") {
     const parser = new PDFParse({ data: file.buffer });
     const result = await parser.getText();
-    console.log(result.text);
+    // console.log(result.text);
     return result.text;
   }
 

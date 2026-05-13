@@ -15,6 +15,7 @@ const computeAnalysis = async (
   jobDescription: string,
 ): Promise<AnalysisResult> => {
   // static analysis
+  console.log("Starting static analysis...");
   let keywords = matchKeywords(resumeText, jobDescription);
   let sections = detectSections(resumeText);
   let score = analyzeATS({ keywords, sections });
