@@ -53,6 +53,15 @@ const TodoItem: React.FC<Props> = ({ todo, onCheck, onEdit, onDelete }) => {
 
         <ListItemText
           primary={todo.text}
+          secondary={[
+            todo.category ? todo.category : null,
+            todo.priority ? todo.priority : null,
+            todo.dueDate
+              ? `Due ${new Date(todo.dueDate).toLocaleDateString()}`
+              : null,
+          ]
+            .filter(Boolean)
+            .join(" • ")}
           sx={{
             textDecoration: todo.completed ? "line-through" : "none",
             color: todo.completed ? "gray" : "black",
