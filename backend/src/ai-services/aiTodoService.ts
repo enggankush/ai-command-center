@@ -55,7 +55,14 @@ IMPORTANT RULES:
 
   13. No explanations.
 
-OUTPUT FORMAT:
+EXAMPLE OUTPUT FORMAT (
+Pointer (similar to Jira Story Points in this project):
+- Pointer is the estimated number of calendar days needed to finish the task.
+- Example:
+  - pointer: 1 = today + 1 day
+  - pointer: 3 = today + 3 days
+  - pointer: 7 = today + 7 days
+):
 
 [
   {
@@ -63,7 +70,7 @@ OUTPUT FORMAT:
     "description": "Update the login form validator to reject invalid email addresses and show a helper message.",
     "priority": "high",
     "category": "coding",
-    "dueDate": "2025-10-01",
+    "pointer": "1",
     "completed": false,
     "source": "ai"
   }
@@ -114,7 +121,7 @@ ${paragraph}
             ? item.priority
             : "medium",
         category: item.category?.trim().toLowerCase() || "personal",
-        dueDate: item.dueDate?.trim() || undefined,
+        pointer: item.pointer?.trim() || "1",
         completed: false,
         source: "ai" as const,
       }))

@@ -5,7 +5,7 @@ export interface AiTodoItem {
   description?: string;
   priority: AiTodoPriority;
   category?: string;
-  dueDate?: string;
+  pointer: string;
   completed: boolean;
   source: "ai";
 }

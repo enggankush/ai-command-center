@@ -6,7 +6,7 @@ export interface ITodo {
   description?: string;
   priority?: "high" | "medium" | "low";
   category?: string;
-  dueDate?: string;
+  pointer?: string;
   completed: boolean;
   createdAt: string;
 }
@@ -16,7 +16,7 @@ export interface IParsedTodo {
   description?: string;
   priority: "high" | "medium" | "low";
   category: "coding" | "study" | "meeting" | "shopping" | "health" | "personal";
-  dueDate?: string;
+  pointer?: string;
   dueTime?: string;
   completed: boolean;
   source: "ai" | "static";

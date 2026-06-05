@@ -22,13 +22,15 @@ const TodoSchema = new Schema(
       enum: ["high", "medium", "low"],
       default: "medium",
     },
+    pointer: {
+      type: String,
+      trim: true,
+      default: "1",
+    },
     category: {
       type: String,
       trim: true,
       default: "general",
-    },
-    dueDate: {
-      type: Date,
     },
     completed: {
       type: Boolean,

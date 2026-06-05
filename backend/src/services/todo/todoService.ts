@@ -22,15 +22,35 @@ const normalizeCategory = (category?: string): ValidCategory => {
     : "personal";
 };
 
-const normalizeDueDate = (date?: string): Date | undefined => {
-  if (!date?.trim()) return undefined;
+// const normalizeDueDate = (date?: string): Date => {
+//   const now = new Date();
 
-  const parsed = new Date(date.trim());
-  return Number.isNaN(parsed.getTime()) ? undefined : parsed;
-};
+//   if (!date?.trim()) return now;
+
+//   const cleaned = date.trim();
+//   const parsed = new Date(cleaned);
+
+//   if (Number.isNaN(parsed.getTime())) return now;
+//   if (parsed < now) return now;
+
+//   const isDateOnly = /^\d{4}-\d{2}-\d{2}$/.test(cleaned);
+//   if (isDateOnly) {
+//     return new Date(
+//       parsed.getFullYear(),
+//       parsed.getMonth(),
+//       parsed.getDate(),
+//       12,
+//       0,
+//       0,
+//       0,
+//     );
+//   }
+
+//   return parsed;
+// };
 
 const normalizeTodoItem = (item: AiTodoItem, userId: string) => ({
-  text: item.title.trim(),
+  text: item.title?.trim() || "",
   description: item.description?.trim() || "",
   priority:
     item.priority === "high" ||
@@ -39,7 +59,7 @@ const normalizeTodoItem = (item: AiTodoItem, userId: string) => ({
       ? item.priority
       : "medium",
   category: normalizeCategory(item.category),
-  dueDate: normalizeDueDate(item.dueDate),
+  pointer: item.pointer?.trim() || "1",
   completed: false,
   source: "ai" as const,
   userId,
@@ -49,7 +69,7 @@ export const parseTodos = async (paragraph: string): Promise<AiTodoItem[]> => {
   const cleaned = paragraph.trim();
   if (!cleaned) return [];
 
-  return generateTodosWithAI(cleaned);
+  return await generateTodosWithAI(cleaned);
 };
 
 export const createTodo = async (

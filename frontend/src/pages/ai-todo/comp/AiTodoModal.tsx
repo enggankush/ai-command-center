@@ -162,9 +162,11 @@ const AiTodoModal = ({
                             label={todo.category || "personal"}
                             size="small"
                           />
-
-                          {todo.dueDate && (
-                            <Chip label={`Due: ${todo.dueDate}`} size="small" />
+                          {todo.pointer && (
+                            <Chip
+                              label={`Pointer: ${todo.pointer}`}
+                              size="small"
+                            />
                           )}
                         </Box>
                       </>
