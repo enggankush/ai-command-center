@@ -5,6 +5,9 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Typography,
+  Box,
+  Chip,
 } from "@mui/material";
 import { EditOutlined, DeleteOutlineOutlined } from "@mui/icons-material";
 import { ITodo } from "../../../services/todoService";
@@ -53,6 +56,41 @@ const TodoItem: React.FC<Props> = ({ todo, onCheck, onEdit, onDelete }) => {
 
         <ListItemText
           primary={todo.text}
+          secondary={
+            <Box>
+              {todo.description && (
+                <Typography variant="body2" color="text.secondary">
+                  {todo.description}
+                </Typography>
+              )}
+
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 1,
+                  mt: 1,
+                }}
+              >
+                <Chip
+                  label={todo.priority}
+                  size="small"
+                  color={
+                    todo.priority === "high"
+                      ? "error"
+                      : todo.priority === "medium"
+                        ? "warning"
+                        : "info"
+                  }
+                />
+
+                <Chip label={todo.category || "personal"} size="small" />
+                {todo.pointer && (
+                  <Chip label={`Pointer: ${todo.pointer}`} size="small" />
+                )}
+              </Box>
+            </Box>
+          }
           sx={{
             textDecoration: todo.completed ? "line-through" : "none",
             color: todo.completed ? "gray" : "black",
