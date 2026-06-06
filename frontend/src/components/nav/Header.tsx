@@ -20,6 +20,7 @@ import PageTitle from "../custom/PageTitle";
 interface User {
   fullName: string;
   email: string;
+  profileImage?: string;
 }
 
 const Header: React.FC = () => {
@@ -56,6 +57,27 @@ const Header: React.FC = () => {
     localStorage.removeItem("currentUser");
     setAnchorEl(null);
     navigate("/login", { replace: true });
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (!file || !user) return;
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const updatedUser = {
+        ...user,
+        profileImage: reader.result as string,
+      };
+
+      localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+
+      window.location.reload();
+    };
+
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -104,6 +126,7 @@ const Header: React.FC = () => {
             aria-expanded={open ? "true" : undefined}
           >
             <Avatar
+              src={user?.profileImage}
               sx={{
                 bgcolor: "#1565c0",
                 width: 45,
@@ -111,7 +134,8 @@ const Header: React.FC = () => {
                 fontWeight: 600,
               }}
             >
-              {user?.fullName?.[0]?.toUpperCase() || "U"}
+              {!user?.profileImage &&
+                (user?.fullName?.[0]?.toUpperCase() || "U")}
             </Avatar>
           </IconButton>
 
@@ -151,6 +175,7 @@ const Header: React.FC = () => {
               }}
             >
               <Avatar
+                src={user?.profileImage}
                 sx={{
                   width: 60,
                   height: 60,
@@ -159,7 +184,8 @@ const Header: React.FC = () => {
                   fontWeight: 600,
                 }}
               >
-                {user?.fullName?.[0]?.toUpperCase() || "U"}
+                {!user?.profileImage &&
+                  (user?.fullName?.[0]?.toUpperCase() || "U")}
               </Avatar>
 
               <Box sx={{ overflow: "hidden" }}>
@@ -184,7 +210,17 @@ const Header: React.FC = () => {
                 </Typography>
               </Box>
             </Box>
-
+            <Divider />
+            {/* Upload Profile Photo */}
+            <MenuItem component="label">
+              Upload Profile Photo
+              <input
+                hidden
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+              />
+            </MenuItem>
             <Divider />
 
             {/* Profile */}
