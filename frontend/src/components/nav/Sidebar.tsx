@@ -16,7 +16,6 @@ import {
   Code,
   CheckCircle,
   SportsEsports,
-  Logout,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
@@ -58,20 +57,6 @@ const Sidebar = () => {
               </ListItemButton>
             </ListItem>
           ))}
-          <ListItemButton
-            onClick={() => {
-              navigator("/login");
-              localStorage.removeItem("currentUser");
-            }}
-          >
-            <ListItemIcon sx={{ color: "red" }}>
-              <Logout />
-            </ListItemIcon>
-            <ListItemText
-              primary="Logout"
-              sx={{ color: "red", fontWeight: "bold" }}
-            />
-          </ListItemButton>
         </List>
       </Box>
     </>
